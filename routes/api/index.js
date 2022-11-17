@@ -5,3 +5,5 @@ router.use('/users',userRoutes)
 router.use('/thoughts',thoughtRoutes)
 
 module.exports = router
+
+// localhost:3001/routes/api/thoughts
