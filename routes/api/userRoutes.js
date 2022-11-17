@@ -1,4 +1,4 @@
-// const User = require('../../models/user')
+const User = require('../../models/user')
 const router = require('express').Router()
 // GET all users
 router.get('/',(req,res)=>{
@@ -36,6 +36,21 @@ router.put('/:id',(req,res)=>{
         res.json(error)
     })
 })
+// // Add friend?
+router.put('/add',(req,res)=>{
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { runValidators: true, new: true }
+    )
+        .then((user) => {
+            !user
+                ? res.status(404).json({ message: 'Invalid user ID' })
+                : res.json(user)
+        })
+        .catch((err) => res.status(500).json(err));
+})
+
 // Delete by ID
 router.delete('/:id',(req,res)=>{
     User.findByIdAndDelete(req.params.id)
