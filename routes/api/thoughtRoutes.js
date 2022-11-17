@@ -21,7 +21,7 @@ router.get('/:id',(req,res)=>{
 })
 
 // Create thought
-router.post('/',()=>{
+router.post('/',(req,res)=>{
     Thought.create(req.body)
     .then((userdata)=>{
         res.json(userdata)
@@ -38,7 +38,7 @@ router.put('/:id',(req,res)=>{
         res.json(error)
     })
 })
-
+// Delete thought by ID
 router.delete('/:id',(req,res)=>{
     Thought.findByIdAndDelete(req.params.id)
     .then((userdata)=>{
@@ -47,11 +47,13 @@ router.delete('/:id',(req,res)=>{
         res.json(error)
     })
 })
-
-// Thought.findOneAndUpdate(
-//     { _id: req.params.thoughtId },
-//     { $addToSet: { reactions: req.body } },
-//     { runValidators: true, new: true }
-//   )
+// Trying to add reactions to thoughts
+router.put('/:id/reactions/',(req,res)=>{
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $addToSet: { reactions: req.body } },
+        { runValidators: true, new: true }
+      )  
+})
 
 module.exports = router

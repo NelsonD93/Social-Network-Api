@@ -36,8 +36,8 @@ router.put('/:id',(req,res)=>{
         res.json(error)
     })
 })
-// // Add friend?
-router.put('/add',(req,res)=>{
+// Add friend
+router.put('/:userId/friends/:friendId',(req,res)=>{
     User.findOneAndUpdate(
         { _id: req.params.userId },
         { $addToSet: { friends: req.params.friendId } },
