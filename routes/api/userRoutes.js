@@ -1,3 +1,4 @@
+const Thought = require('../../models/thought')
 const User = require('../../models/user')
 const router = require('express').Router()
 // GET all users
@@ -55,6 +56,7 @@ router.put('/:userId/friends/:friendId',(req,res)=>{
 router.delete('/:id',(req,res)=>{
     User.findByIdAndDelete(req.params.id)
     .then((userdata)=>{
+        Thought.deleteMany({_id: {$in: user.thoughts}})
         res.json(userdata)
     }) .catch((error)=>{
         res.json(error)

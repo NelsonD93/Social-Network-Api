@@ -1,4 +1,5 @@
 const Thought = require('../../models/thought');
+const User = require('../../models/user');
 const router = require('express').Router();
 
 // Get all thoughts
@@ -24,6 +25,11 @@ router.get('/:id',(req,res)=>{
 router.post('/',(req,res)=>{
     Thought.create(req.body)
     .then((userdata)=>{
+        User.findOneAndUpdate(
+            {_id: userId },
+            {$addToSet: {thoughts:thought.id} },
+            {runValidators: true, new: true}
+        )
         res.json(userdata)
     }) .catch((error)=>{
         res.json(error)
@@ -47,13 +53,19 @@ router.delete('/:id',(req,res)=>{
         res.json(error)
     })
 })
-// Trying to add reactions to thoughts
+// Add reactions to thoughts
 router.put('/:id/reactions/',(req,res)=>{
     Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $addToSet: { reactions: req.body } },
         { runValidators: true, new: true }
       )  
+      .then((dbThoughtData)=>{
+        if (!dbThoughtData) { // handle error if thought not found
+            return res.status(404).json({ message: 'No thought with this id!' });
+          }
+          res.json(dbThoughtData);
+      })
 })
 
 module.exports = router
