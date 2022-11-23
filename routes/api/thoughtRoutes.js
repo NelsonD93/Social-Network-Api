@@ -55,7 +55,7 @@ router.delete('/:id',(req,res)=>{
 })
 
 // Add reactions to thoughts
-router.put('/:id/reactions/',(req,res)=>{
+router.put('/:thoughtId/reactions',(req,res)=>{
     Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $addToSet: { reactions: req.body } },
