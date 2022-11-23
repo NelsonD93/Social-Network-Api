@@ -22,7 +22,7 @@ router.get('/:id',(req,res)=>{
 })
 
 // Create thought
-router.post('/',(req,res)=>{
+router.post('/:userId/create/',(req,res)=>{
     Thought.create(req.body)
     .then((userdata)=>{
         User.findOneAndUpdate(
@@ -53,6 +53,7 @@ router.delete('/:id',(req,res)=>{
         res.json(error)
     })
 })
+
 // Add reactions to thoughts
 router.put('/:id/reactions/',(req,res)=>{
     Thought.findOneAndUpdate(
