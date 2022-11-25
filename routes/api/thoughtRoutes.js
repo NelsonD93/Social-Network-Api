@@ -55,10 +55,27 @@ router.delete('/:id',(req,res)=>{
 })
 
 // Add reactions to thoughts
-router.put('/:thoughtId/reactions',(req,res)=>{
+router.post('/:thoughtId/reactions',(req,res)=>{
     Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $addToSet: { reactions: req.body } },
+        { runValidators: true, new: true }
+      )  
+      .then((dbThoughtData)=>{
+        if (!dbThoughtData) { // handle error if thought not found
+            return res.status(404).json({ message: 'No thought with this id!' });
+          }
+          res.json(dbThoughtData);
+      })
+})
+
+
+
+// Delete reaction from thought
+router.delete('/:thoughtId/reactions',(req,res)=>{
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reactions: {reactionId: req.body.reactionId } } },
         { runValidators: true, new: true }
       )  
       .then((dbThoughtData)=>{

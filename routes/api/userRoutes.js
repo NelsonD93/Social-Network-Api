@@ -52,7 +52,22 @@ router.put('/:userId/friends/:friendId',(req,res)=>{
         .catch((err) => res.status(500).json(err));
 })
 
-// Delete by ID
+// Delete friend
+router.delete('/:userId/friends/:friendId',(req,res)=>{
+    User.findByIdAndDelete(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.params.friendId } },
+        { runValidators: true, new: true }
+    )
+        .then((user) => {
+            !user
+                ? res.status(404).json({ message: 'Invalid user ID' })
+                : res.json(user)
+        })
+        .catch((err) => res.status(500).json(err));
+})
+
+// Delete User by ID
 router.delete('/:id',(req,res)=>{
     User.findByIdAndDelete(req.params.id)
     .then((userdata)=>{
