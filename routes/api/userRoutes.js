@@ -54,9 +54,9 @@ router.put('/:userId/friends/:friendId',(req,res)=>{
 
 // Delete friend
 router.delete('/:userId/friends/:friendId',(req,res)=>{
-    User.findByIdAndDelete(
+    User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: req.params.friendId } },
+        { $pull: { friends: req.params.friendId } },
         { runValidators: true, new: true }
     )
         .then((user) => {
